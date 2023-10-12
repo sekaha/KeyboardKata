@@ -2,8 +2,8 @@ import penalty_gen
 from keyboard import Keyboard
 from itertools import product
 
-slope = 15.86750971186548
-intercept = 117.50531805429226
+slope = 10.605790310239463
+intercept = 127.15273551187612
 
 kb = Keyboard()
 
@@ -25,11 +25,11 @@ def get_penalty(bg):
     f = p[8][0]
 
     f_p = {
-        0: finger_pen["pinky"] * left_hand_pen,
-        1: finger_pen["ring"] * left_hand_pen,
-        2: finger_pen["middle"] * left_hand_pen,
-        3: finger_pen["index"] * left_hand_pen,
-        4: finger_pen["index"] * left_hand_pen,
+        0: finger_pen["pinky"],
+        1: finger_pen["ring"],
+        2: finger_pen["middle"],
+        3: finger_pen["index"],
+        4: finger_pen["index"],
         5: finger_pen["index"],
         6: finger_pen["index"],
         7: finger_pen["middle"],
@@ -39,7 +39,7 @@ def get_penalty(bg):
 
     d = p[6]
 
-    return d * slope * f_p + intercept
+    return (d * slope + intercept) * f_p
     # print(f"{bg}:{d*1.9:0.1f} cm,{(d*slope*f_p+intercept) : 0.1f}", "ms")
 
 
@@ -54,7 +54,22 @@ combos = sum(
 
 penalties = sorted([(c, round(get_penalty(c), 2)) for c in combos], key=lambda x: -x[1])
 
-print([p for p in penalties if p[1] != round(intercept, 2)])
+print(pen.get_bigram_penalties("yu")[6])
+
+my_i = -1
+
+for i, p in enumerate(penalties):
+    if p[0] == "my":
+        my_i = i
+        break
+
+
+print("\n".join([f"{a}: {b}" for (a, b) in penalties if b >= penalties[my_i][1]]))
+
+# with open("owo.txt", "w") as f:
+#    f.write(
+#        "\n".join([f"{a}: {b}" for (a, b) in penalties])
+#    )  # if b < round(intercept, 2)]))
 
 
 # trigram

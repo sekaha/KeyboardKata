@@ -2,7 +2,7 @@ import concurrent.futures
 from collections import Counter
 
 
-def get_grams(corpus, valid=set("abcdefghijklmnopqrstuvwxyz[]\;',./`1234567890-= ")):
+def get_grams(corpus, valid=set("abcdefghijklmnopqrstuvwxyz[];',./`1234567890-= \\")):
     DATA_TYPES = {
         "characters": (1, 0),
         "bigrams": (2, 0),
@@ -35,8 +35,6 @@ def get_grams(corpus, valid=set("abcdefghijklmnopqrstuvwxyz[]\;',./`1234567890-=
         with open(f"data/{alias}.txt", "w") as f:
             for chars, count in sorted(grams.items(), key=lambda x: -x[1]):
                 f.write(f"{chars}\t{count}\n")
-
-    threads = []
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [

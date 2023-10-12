@@ -5,15 +5,13 @@ from random import randint
 class Keyboard:
     def __init__(
         self,
-        # ["1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./"],
-        kb=["qwertyuiop", "asdfghjkl.", "zxcvbnm,'-"],
+        kb=["1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./"],
         valid=None,
         groups=None,
     ):
         self.kb = [[c for c in row] for row in kb]
         self.finger_i = [0, 1, 2, 3, 3, 6, 6, 7, 8, 9, 9, 9, 9]
-        # [-0.75, -0.25, 0, 0.5]  # staggered keyboard offsets
-        self.row_offsets = [-0.25, 0, 0.5]
+        self.row_offsets = [-0.75, -0.25, 0, 0.5]  # staggered keyboard offsets
         self.key_size = 1.9  # cm
         self.distances = {}
 
@@ -36,24 +34,44 @@ class Keyboard:
     def copy(self):
         new = Keyboard()
         new.kb = [row.copy() for row in self.kb]
+        new.locks = self.locks
+        new.groups = self.groups
         return new
 
     def swap(self):
-        should_swap = True
+        locked = True
+        group1, group2, same_group = None, None, True
 
-        while should_swap:
+        while locked:
             y1 = randint(0, len(self.kb) - 1)
             x1 = randint(0, len(self.kb[y1]) - 1)
 
+            if self.groups:
+                for group in self.groups:
+                    if self.kb[y1][x1] in group:
+                        group1 = group
+                        break
+
+            locked = (y1, x1) in self.locks
+
+        locked = True
+
+        while locked:
             y2 = randint(0, len(self.kb) - 1)
             x2 = randint(0, len(self.kb[y2]) - 1)
 
-            should_swap = (
-                False  # self.kb[y1][x1] in "ioeantsr" or self.kb[y2][x2] in "ioeantsr"
-            )
+            if self.groups:
+                for group in self.groups:
+                    if self.kb[y2][x2] in group:
+                        group2 = group
+                        break
 
-            if not should_swap:
-                self.kb[y1][x1], self.kb[y2][x2] = self.kb[y2][x2], self.kb[y1][x1]
+                if group1 and group2:
+                    same_group = self.kb[y1][x1] in group2 or self.kb[y2][x2] in group1
+
+            locked = (y2, x2) in self.locks or not same_group
+
+        self.kb[y1][x1], self.kb[y2][x2] = self.kb[y2][x2], self.kb[y1][x1]
 
     # memoization of dist calculations basically :)
     def get_distance(self, x1, y1, x2, y2):

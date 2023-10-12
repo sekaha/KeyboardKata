@@ -119,20 +119,36 @@ def print_data():
     # print("right", get_key_data("uiopjlk;m,./yhn") - baseline)
 
     # finger strengths
-    l_pinky = int(get_avg([ngram_speed("".join(t)) for t in product("qaz", repeat=2)]))
-    l_ring = int(get_avg([ngram_speed("".join(t)) for t in product("wsx", repeat=2)]))
-    l_middle = int(get_avg([ngram_speed("".join(t)) for t in product("edc", repeat=2)]))
-    l_index = int(get_avg([ngram_speed("".join(t)) for t in product("rfv", repeat=2)]))
+    l_pinky = get_avg([ngram_speed("".join(t)) for t in product("qaz", repeat=2)]) - (
+        ngram_speed("aa")
+    )
+    l_ring = get_avg([ngram_speed("".join(t)) for t in product("wsx", repeat=2)]) - (
+        ngram_speed("ss")
+    )
+    l_middle = get_avg([ngram_speed("".join(t)) for t in product("edc", repeat=2)]) - (
+        ngram_speed("dd")
+    )
+    l_index = get_avg([ngram_speed("".join(t)) for t in product("rfv", repeat=2)]) - (
+        ngram_speed("ff")
+    )
 
     print("left pinky", l_pinky)
     print("left ring", l_ring)
     print("left middle", l_middle)
     print("left index", l_index)
 
-    r_pinky = int(get_avg([ngram_speed("".join(t)) for t in product("p;/", repeat=2)]))
-    r_ring = int(get_avg([ngram_speed("".join(t)) for t in product("ol.", repeat=2)]))
-    r_middle = int(get_avg([ngram_speed("".join(t)) for t in product("ik,", repeat=2)]))
-    r_index = int(get_avg([ngram_speed("".join(t)) for t in product("ujm", repeat=2)]))
+    r_pinky = get_avg([ngram_speed("".join(t)) for t in product("p;/", repeat=2)]) - (
+        ngram_speed(";;")
+    )
+    r_ring = get_avg([ngram_speed("".join(t)) for t in product("ol.", repeat=2)]) - (
+        ngram_speed("ll")
+    )
+    r_middle = get_avg([ngram_speed("".join(t)) for t in product("ik,", repeat=2)]) - (
+        ngram_speed("kk")
+    )
+    r_index = get_avg([ngram_speed("".join(t)) for t in product("ujm", repeat=2)]) - (
+        ngram_speed("jj")
+    )
 
     print("right pinky", r_pinky)
     print("right ring", r_ring)

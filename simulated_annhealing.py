@@ -3,7 +3,7 @@ import random
 
 # Define the objective function to be minimized
 def objective_function(x):
-    return math.sin(x)
+    return math.sin(x) + abs(x - 10)
 
 
 # Simulated Annealing function

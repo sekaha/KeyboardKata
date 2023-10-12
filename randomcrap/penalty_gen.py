@@ -14,7 +14,7 @@ from math import log2
 # scissor moment?
 
 
-class Specification:
+class Penalty:
     def __init__(self, kb=Keyboard()):
         self.distances = {}
 
@@ -36,7 +36,7 @@ class Specification:
             dist = (dx**2 + dy**2) ** 0.5
 
             # Shannon formulation of fitts' law, since the speed difference should be logarithmic _in theory_
-            self.distances[key] = log2(dist + 1)
+            self.distances[key] = dist  # log2(dist + 1)
 
         return self.distances[key]
 
@@ -80,7 +80,9 @@ class Specification:
             else:
                 roll = 1
 
-        return {alt, sfb, sfr, roll, inward, outward}
+            # slope intercept to convert it milliseconds
+
+        return alt, sfb, sfr, roll, inward, outward, dist, (x1, y1), (x2, y2)
 
     # Tristroke categories
     # alt - where you switch hands twice
@@ -108,6 +110,3 @@ class Specification:
         sfb = bg1[1] ^ bg2[1]
 
         onehand = not alt
-
-
-spec = Specification()
